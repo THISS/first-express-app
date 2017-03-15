@@ -31,7 +31,7 @@ app.get('/u/:shortURL', (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.end("Hello!");
+  res.end("Hello There!");
 });
 
 app.get("/urls.json", (req, res) => {

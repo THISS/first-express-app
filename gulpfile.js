@@ -9,7 +9,7 @@ const watch = require('gulp-watch');
 gulp.task('default', function() {
 	
 		// listen for changes
-	livereload.listen();
+	livereload({start:true});
 	// configure nodemon
 	let nmon = nodemon({
 		// the script to run the app
@@ -17,14 +17,19 @@ gulp.task('default', function() {
 		ext: 'js'
 		// legacyWatch: true
 	}).on('restart', function(){
-		// when the app has restarted, run livereload.
-		gulp.src('express-server.js')
-		.pipe(livereload());
+		// log when the app has restarted
 		console.log("Server is restarting...");
 	});
-	gulp.watch(['/views/**/*', 'express-server.js'], () => {
-		// force a restart
+	gulp.watch(['views/**/*.ejs'], () => {
+		// force a reload
+		livereload.reload();
+		// console.log("livereload reload triggered");
+	});
+	gulp.watch(['express-server.js', 'gulpfile.js'], () => {
+		// Restart the server with nodemon
 		nmon.emit('restart');
+		livereload.reload('express-server.js');
+		// console.log('livereload reload server');
 	});
 	
 	

@@ -56,9 +56,9 @@ app.get("/urls", (req, res) => {
   res.render("urls_index", wrappedDB);
 });
 
-app.get("/urls/:id", (req, res) => {
-  console.log(req.params.id)
-  const short = req.params.id;
+app.get("/urls/:shortURL", (req, res) => {
+  // console.log(req.params.shortURL)
+  const short = req.params.shortURL;
   let templateVars = { 
     shortURL: short,
     bigURL: urlDatabase[short]
@@ -67,8 +67,15 @@ app.get("/urls/:id", (req, res) => {
   res.render("urls_show", templateVars);
 });
 
-app.post("/urls/:id/delete", (req, res) => {
-  delete urlDatabase[req.params.id];
+app.post("/urls/:shortURL", (req, res) => {
+  const short = req.params.shortURL;
+  const big = req.body.update_input;
+  urlDatabase[short] = big;
+  res.redirect("/urls/" + short);
+});
+
+app.post("/urls/:shortURL/delete", (req, res) => {
+  delete urlDatabase[req.params.shortURL];
   res.redirect("/urls");
 });
 

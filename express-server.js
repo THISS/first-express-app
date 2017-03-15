@@ -4,6 +4,7 @@ const express = require("express");
 const PORT = process.env.PORT || 8080; // default port 8080
 const app = express();
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 // Generate a random string
 function generateRandomString() {
@@ -19,8 +20,9 @@ function generateRandomString() {
 // and render with ejs module
 app.set('view engine', 'ejs');
 
-// First middle ware looking for form data too
+// The MiddleWare Begins
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // The URL Database that will allllllllways persist these three urls 
 // When delete has not been used

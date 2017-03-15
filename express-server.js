@@ -48,7 +48,7 @@ app.get("/", (req, res) => {
 // Login via post
 app.post("/login", (req, res) => {
   const name = req.body.username;
-  res.cookie(username, name);
+  res.cookie("username", name);
   res.redirect('/');
 });
 

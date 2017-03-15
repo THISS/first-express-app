@@ -21,7 +21,7 @@ gulp.task('default', function() {
 	}).on('restart', function(){
 		// when the app has restarted, run livereload.
 		gulp.src('express-server.js')
-			.pipe(livereload())
-			.pipe(notify("The server is restarting..."));
+			.pipe(livereload());
+		console.log("Server is restarting...");
 	})
 })

@@ -42,6 +42,20 @@ app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });
 
+app.post("/urls", (req, res) => {
+  // console.log(req.body);
+  const bigURL = req.body.longURL;
+  const randURL = generateRandomString();
+  urlDatabase[randURL] = bigURL;
+  console.log(urlDatabase);
+  res.redirect(`/urls/${randURL}`);
+});
+
+app.get("/urls", (req, res) => {
+  const wrappedDB = { urlDatabase: urlDatabase };
+  res.render("urls_index", wrappedDB);
+});
+
 app.get("/urls/:id", (req, res) => {
   console.log(req.params.id)
   const short = req.params.id;
@@ -53,18 +67,9 @@ app.get("/urls/:id", (req, res) => {
   res.render("urls_show", templateVars);
 });
 
-app.post("/urls", (req, res) => {
-  // console.log(req.body);
-  const bigURL = req.body.longURL;
-  const randURL = generateRandomString();
-  urlDatabase[randURL] = bigURL;
-  console.log(urlDatabase);
-  res.redirect(`/urls/${randURL}`);
-});
-
-app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase };
-  res.render("urls_index", templateVars);
+app.post("/urls/:id/delete", (req, res) => {
+  delete urlDatabase[req.params.id];
+  res.redirect("/urls");
 });
 
 app.get("/hello", (req, res) => {

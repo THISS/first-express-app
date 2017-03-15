@@ -26,6 +26,7 @@
     "gulp": "^3.9.1",
     "gulp-livereload": "^3.8.1",
     "gulp-nodemon": "^2.2.1",
-    "gulp-notify": "^3.0.0"
+    "gulp-notify": "^3.0.0",
+    "gulp-watch": "^4.3.11"
   }
 }

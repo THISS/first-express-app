@@ -13,8 +13,7 @@ function generateRandomString() {
   }
   return result.join('');
 }
-console.log(generateRandomString());
-process.exit();
+
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -27,6 +26,7 @@ const urlDatabase = {
 
 app.get('/u/:shortURL', (req, res) => {
   let longURL = urlDatabase[req.params.shortURL];
+  // console.log(longURL);
   res.redirect(longURL);
 });
 
@@ -43,13 +43,23 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.get("/urls/:id", (req, res) => {
-  let templateVars = { shortURL: req.params.id };
+  console.log(req.params.id)
+  const short = req.params.id;
+  let templateVars = { 
+    shortURL: short,
+    bigURL: urlDatabase[short]
+   };
+   console.log(templateVars);
   res.render("urls_show", templateVars);
 });
 
 app.post("/urls", (req, res) => {
-  console.log(req.body);
-  res.send("Ok");
+  // console.log(req.body);
+  const bigURL = req.body.longURL;
+  const randURL = generateRandomString();
+  urlDatabase[randURL] = bigURL;
+  console.log(urlDatabase);
+  res.redirect(`/urls/${randURL}`);
 });
 
 app.get("/urls", (req, res) => {

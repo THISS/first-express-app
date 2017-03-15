@@ -44,6 +44,14 @@ app.get("/", (req, res) => {
   res.end("Hello There!");
 });
 
+
+// Login via post
+app.post("/login", (req, res) => {
+  const name = req.body.username;
+  res.cookie(username, name);
+  res.redirect('/');
+});
+
 // Our REST implementation
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);

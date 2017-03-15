@@ -5,6 +5,17 @@
   </head>
   <body>
     <% include partials/_header.ejs %>
-    <p></p>sample Index file
+    <ul>
+    <% for(let shortURL in urlDatabase) { %>
+      <li>
+          <form action="/urls/<%= shortURL %>/delete" method="POST">
+            <label>
+              <input type="submit" name="delete_input" value="X">
+              <a href="/urls/<%= shortURL %>"><%= urlDatabase[shortURL] %></a>
+            </label>
+          </form>
+      </li>
+    <% } %>
+    </ul>
   </body>
 </html>

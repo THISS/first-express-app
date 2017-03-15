@@ -10,8 +10,9 @@
       <li>
           <form action="/urls/<%= shortURL %>/delete" method="POST">
             <label>
-              <input type="submit" name="delete_input" value="X">
               <a href="/urls/<%= shortURL %>"><%= urlDatabase[shortURL] %></a>
+              <a href="/urls/<%= shortURL %>">Edit</a>
+              <input type="submit" name="delete_input" value="X">
             </label>
           </form>
       </li>

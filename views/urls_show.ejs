@@ -4,7 +4,13 @@
     <title>Tiny App</title>
   </head>
   <body>
-    <h1><%= bigURL %> | <%= shortURL %></h1>
     <% include partials/_header.ejs %>
+    <h1>ShortURL: <%= shortURL %></h1>
+    <form action="/urls/<%= shortURL %>" method="POST">
+      <label>
+        <input type="text" name="update_input" size="<%= bigURL.length %>"value="<%= bigURL %>">
+        <input type="submit" value="Update URL">
+      </label>
+    </form>
   </body>
 </html>

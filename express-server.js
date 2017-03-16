@@ -41,7 +41,11 @@ app.get('/u/:shortURL', (req, res) => {
 
 // Our Homepage
 app.get("/", (req, res) => {
-  res.end("Hello There!");
+  let templateVars = {
+    username: req.cookies["username"],
+    urlDatabase: urlDatabase
+  };
+  res.render("urls_index", templateVars);
 });
 
 
@@ -74,8 +78,8 @@ app.post("/urls", (req, res) => {
 
 // List all the URLs
 app.get("/urls", (req, res) => {
-  const wrappedDB = { urlDatabase: urlDatabase };
-  res.render("urls_index", wrappedDB);
+  const templateVars = { urlDatabase: urlDatabase };
+  res.render("urls_index", templateVars);
 });
 
 // Show a tinyURL and allow user to edit the original
@@ -86,7 +90,6 @@ app.get("/urls/:shortURL", (req, res) => {
     shortURL: short,
     bigURL: urlDatabase[short]
    };
-   console.log(templateVars);
   res.render("urls_show", templateVars);
 });
 

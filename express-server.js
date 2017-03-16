@@ -23,6 +23,12 @@ app.set('view engine', 'ejs');
 // The MiddleWare Begins
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use((req, res, next) => {
+  const templateVars = {};
+  req.templateVars = templateVars;
+  res.templateVars = templateVars;
+  next();
+});
 
 // The URL Database that will allllllllways persist these three urls 
 // When delete has not been used
@@ -65,30 +71,46 @@ app.get("/", (req, res) => {
 
 // Login via post
 app.post("/login", (req, res) => {
-  const name = req.body.username;
-  res.cookie("username", name);
+  const email = req.body.email;
+  const userID = req.body.user_id;
+  res.cookie("user_id", userID);
   res.redirect('/');
 });
 
 // Logout
 app.post("/logout", (req, res) => {
-  res.clearCookie("username");
+  res.clearCookie("user_id");
   res.redirect('/');
 });
 
 // Registration form
 app.get("/register", (req, res) => {
-  if(req.cookies.username){
-    res.redirect('/urls');
+  if(req.cookies.user_id){
+    res.redirect('/');
   }
-  res.render('register_user',{error: ""});
+  res.render('register_user');
 });
 
+// helper function to check emails
+// returns true if it exists
+function emailCheck(emailAddress) {
+  for(let i in userDatabase) {
+    if(userDatabase[i].email === emailAddress) {
+      return true;
+    }
+  }
+  return false;
+}
+
 app.post("/register", (req, res) => {
-  const templateVars = { error: "" };
   const form = req.body;
   // Check if all forms have been filled out
   if(form.email && form.password) {
+    // If the users email is already registered 
+    // (shitty lookup check for bigger project)
+    if(emailCheck(form.email)) {
+      res.status(400).render('400');
+    }
     // Generate a new userRandomID
     const userID = generateRandomString();
     // Add the new user to userDatabase
@@ -104,11 +126,9 @@ app.post("/register", (req, res) => {
     // redirect to '/' path 
     res.redirect('/');
     
-  }else {
-    templateVars.error = "Need to supply an email and password";
   }
-  // Otherwise redirect to the register page
-  res.render('register_user', templateVars);
+  // Otherwise redirect to the 400 page
+  res.status(400).render('400');
 });
 
 // Our REST implementation

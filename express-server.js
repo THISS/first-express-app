@@ -32,6 +32,20 @@ const urlDatabase = {
   "9sm5xL": "http://www.castawayswatersports.com"
 };
 
+// User Database
+const userDatabase = {
+  "userRandomID": {
+    id: "userRandomID",
+    email: "useremail1@g.com",
+    passhash: "fluffybunny"
+  },
+  "userRandomID2": {
+    id: "userRandomID2",
+    email: "useremail2@g.com",
+    passhash: "password"
+  }
+};
+
 // redirect our client to the URL in our URL DB
 app.get('/u/:shortURL', (req, res) => {
   let longURL = urlDatabase[req.params.shortURL];
@@ -60,6 +74,25 @@ app.post("/login", (req, res) => {
 app.post("/logout", (req, res) => {
   res.clearCookie("username");
   res.redirect('/');
+});
+
+// Registration form
+app.get("/register", (req, res) => {
+  if(req.cookies.username){
+    res.redirect('/urls');
+  }
+  res.render('register_user');
+});
+
+app.post("/register", (req, res) => {
+  //TODO: Check if all forms have been filled out
+  
+  //TODO: Generate a new userRandomID
+  //TODO: Add the new user to userDatabase
+  //TODO: TEST / Check that the userDatabase is being appended to correctly
+  //TODO: Set user_id as cookie
+  //TODO: Check the user_id cookie has been set
+  //TODO: redirect to '/' path 
 });
 
 // Our REST implementation

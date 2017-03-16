@@ -4,11 +4,14 @@
     <title>TinyApp</title>
   </head>
   <body>
+    <% if(error) {%>
+      <h4><%= error %></h4>
+    <% } %>
     <form action="/register" method="post">
       <label for="email">Email</label>
-      <input required="true" type="email" id="email" name="email" />
+      <input required type="email" id="email" name="email" />
       <label for="password">Password:</label>
-      <input required="true" minlength="4" type="password" id="password" name="password" />
+      <input required minlength="4" type="password" id="password" name="password" />
       <button type="submit">Register</button>
     </form>
   </body>

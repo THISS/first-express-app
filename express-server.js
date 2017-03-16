@@ -25,10 +25,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use((req, res, next) => {
   if(req.cookies.user_id) {
-    res.locals.username = req.cookies.user_id;
+    const email = userDatabase[req.cookies.user_id].email;
+    res.locals.username = email;
+  }else {
+    res.locals.username = "";
   }
   if(req.cookies.error) {
     res.locals.error = req.cookies.error;
+  }else {
+    res.locals.error = "";
   }
   next();
 });
@@ -41,12 +46,13 @@ const urlDatabase = {
   "9sm5xL": "http://www.castawayswatersports.com"
 };
 
-// User Database
+// User Database - if User email or User id is modified
+// modify the same in userEmailDatabase
 const userDatabase = {
   "userRandomID": {
     id: "userRandomID",
-    email: "useremail1@g.com",
-    passhash: "fluffybunny"
+    email: "a@g.com",
+    passhash: "12345"
   },
   "userRandomID2": {
     id: "userRandomID2",
@@ -56,8 +62,10 @@ const userDatabase = {
 };
 
 // User Email Database Lookup Table
+// if User email or User id is modified
+// modify the same in userDatabase
 const userEmailDatabase = {
-  "useremail1@g.com": "userRandomID",
+  "a@g.com": "userRandomID",
   "useremail2@g.com": "userRandomID2"
 }
 
@@ -77,18 +85,21 @@ app.get("/", (req, res) => {
 
 // Login via post
 app.post("/login", (req, res) => {
+  res.clearCookie("error");
   if(req.body.email && req.body.password) {
     const email = req.body.email;
     const userID = userEmailDatabase[email];
-    const password = userDatabase[userID].passhash;
-    if(userID && req.body.password === password){
-      req.clearCookie("error");
-      res.cookie("user_id", userID);
-      res.redirect('/');
+    if(userID) {
+      const password = userDatabase[userID].passhash;
+      if(req.body.password === password){
+        res.cookie("user_id", userID);
+        res.redirect('/');
+        return;
+      }
     }
-    res.cookie("error", "Email or Password are incorrect");
-    res.redirect('/login');
   }
+  res.cookie("error", "Email or Password are incorrect");
+  res.redirect('/');
 });
 
 // Logout
@@ -115,6 +126,7 @@ function emailCheck(emailAddress) {
 }
 
 app.post("/register", (req, res) => {
+  res.clearCookie("error");
   if(res.locals.username) {
     res.redirect("/");
   }
@@ -139,8 +151,11 @@ app.post("/register", (req, res) => {
 
     // Set user_id as cookie
     res.cookie('user_id', userID);
+    // Clear attempts cookie
+    res.clearCookie("attempts");
     // redirect to '/' path 
     res.redirect('/');
+    return;
   }
   // if either emil or password not supplied render to 400 page
   res.status(400).render('400');

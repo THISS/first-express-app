@@ -56,6 +56,12 @@ app.post("/login", (req, res) => {
   res.redirect('/');
 });
 
+// Logout
+app.post("/logout", (req, res) => {
+  res.clearCookie("username");
+  res.redirect('/');
+});
+
 // Our REST implementation
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);

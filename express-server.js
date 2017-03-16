@@ -85,14 +85,29 @@ app.get("/register", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-  //TODO: Check if all forms have been filled out
-  
-  //TODO: Generate a new userRandomID
-  //TODO: Add the new user to userDatabase
-  //TODO: TEST / Check that the userDatabase is being appended to correctly
-  //TODO: Set user_id as cookie
-  //TODO: Check the user_id cookie has been set
-  //TODO: redirect to '/' path 
+  const templateVars = {};
+  const form = req.body;
+  // Check if all forms have been filled out
+  if(form.email && form.password) {
+    // Generate a new userRandomID
+    const userID = generateRandomString();
+    // Add the new user to userDatabase
+    userDatabase[userID] = {
+      id: userID,
+      email: form.email,
+      passhash: form.password
+    };
+    //TODO: TEST / Check that the userDatabase is being appended to correctly
+    console.log(userDatabase);
+    //TODO: Set user_id as cookie
+    //TODO: Check the user_id cookie has been set
+    //TODO: redirect to '/' path 
+    
+  }else {
+    templateVars.error = "Need to supply an email and password";
+  }
+  // Otherwise redirect to the register page
+  res.redirect('/register', templateVars);
 });
 
 // Our REST implementation

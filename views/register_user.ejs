@@ -4,6 +4,9 @@
     <title>TinyApp</title>
   </head>
   <body>
+    <% if(error.length > 0) {%>
+      <h4><%= error %></h4>
+    <% } %>
     <form action="/register" method="post">
       <label for="email">Email</label>
       <input type="email" id="email" name="email" />

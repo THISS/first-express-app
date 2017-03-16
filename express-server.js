@@ -81,11 +81,11 @@ app.get("/register", (req, res) => {
   if(req.cookies.username){
     res.redirect('/urls');
   }
-  res.render('register_user');
+  res.render('register_user',{error: ""});
 });
 
 app.post("/register", (req, res) => {
-  const templateVars = {};
+  const templateVars = { error: "" };
   const form = req.body;
   // Check if all forms have been filled out
   if(form.email && form.password) {
@@ -97,17 +97,18 @@ app.post("/register", (req, res) => {
       email: form.email,
       passhash: form.password
     };
-    //TODO: TEST / Check that the userDatabase is being appended to correctly
-    console.log(userDatabase);
-    //TODO: Set user_id as cookie
-    //TODO: Check the user_id cookie has been set
-    //TODO: redirect to '/' path 
+    // Set user_id as cookie
+    res.cookie('user_id', userID);
+    // Check the user_id cookie has been set
+    console.log(req.cookies);
+    // redirect to '/' path 
+    res.redirect('/');
     
   }else {
     templateVars.error = "Need to supply an email and password";
   }
   // Otherwise redirect to the register page
-  res.redirect('/register', templateVars);
+  res.render('register_user', templateVars);
 });
 
 // Our REST implementation

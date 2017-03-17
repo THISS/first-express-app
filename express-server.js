@@ -23,18 +23,20 @@ app.set('view engine', 'ejs');
 // The MiddleWare Begins
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+// My template vars and cookies
 app.use((req, res, next) => {
   if(req.cookies.user_id) {
-    const email = userDatabase[req.cookies.user_id].email;
-    res.locals.username = email;
+    const user = userDatabase[req.cookies.user_id];
+    res.locals.user = user;
   }else {
-    res.locals.username = "";
+    res.locals.user = {};
   }
-  if(req.cookies.error) {
+  if(req.cookies.error && req.cookies.prev_path === req.path) {
     res.locals.error = req.cookies.error;
   }else {
     res.locals.error = "";
   }
+  res.cookie("prev_path", req.path);
   next();
 });
 
@@ -82,7 +84,9 @@ app.get("/", (req, res) => {
   res.render("urls_index");
 });
 
-
+app.get("/login", (req, res) => {
+  res.render("login_user");
+});
 // Login via post
 app.post("/login", (req, res) => {
   res.clearCookie("error");
@@ -99,7 +103,7 @@ app.post("/login", (req, res) => {
     }
   }
   res.cookie("error", "Email or Password are incorrect");
-  res.redirect('/');
+  res.redirect('/login');
 });
 
 // Logout

@@ -25,7 +25,7 @@ router.post("/login", (req, res) => {
     const userID = userEmailDatabase[email];
     if(userID) {
       const password = userDatabase[userID].passhash;
-      if(req.body.password === password){
+      if(helper.bcrypt.compareSync(req.body.password, password)){
         res.cookie("user_id", userID);
         res.redirect('/');
         return;
@@ -68,7 +68,7 @@ router.post("/register", (req, res) => {
     userDatabase[userID] = {
       id: userID,
       email: form.email,
-      passhash: form.password
+      passhash: helper.bcrypt.hashSync(form.password, 10);
     };
 
     // Add email to id Lookup

@@ -1,3 +1,6 @@
+const bcrypt = require("bcrypt");
+
+
 // Generate a random string
 function generateRandomString() {
   const alpha = 'abcdefghijklmnopqrstuvwxyz';
@@ -65,6 +68,7 @@ function userBelongsToUrl(request, response, database) {
 }
 
 module.exports = {
+  bcrypt: bcrypt,
   generateRandomString: generateRandomString, 
   urlsForUserId: urlsForUserId,
   emailCheck: emailCheck,

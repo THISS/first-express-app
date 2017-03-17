@@ -10,6 +10,7 @@ const userEmailDatabase = require("../data/databases").userEmailDatabase;
 router.get("/login", (req, res) => {
   if(res.locals.userLoggedIn){
     res.redirect("/");
+    return;
   }
   res.render("login_user");
 });
@@ -18,6 +19,7 @@ router.get("/login", (req, res) => {
 router.post("/login", (req, res) => {
   if(res.locals.userLoggedIn){
     res.render("login_user");
+    return;
   }
   req.session.error = null;
   if(req.body.email && req.body.password) {
@@ -46,6 +48,7 @@ router.post("/logout", (req, res) => {
 router.get("/register", (req, res) => {
   if(res.locals.userLoggedIn){
     res.redirect('/');
+    return;
   }
   res.render('register_user');
 });
@@ -54,6 +57,7 @@ router.post("/register", (req, res) => {
   req.session.error = null;
   if(res.locals.userLoggedIn) {
     res.redirect("/");
+    return;
   }
   const form = req.body;
   // Check if all forms have been filled out
@@ -61,6 +65,7 @@ router.post("/register", (req, res) => {
     // If the users email is already registered 
     if(helper.emailCheck(form.email, userEmailDatabase)) {
       res.status(400).render('400');
+      return;
     }
     // Generate a new userRandomID
     const userID = helper.generateRandomString();

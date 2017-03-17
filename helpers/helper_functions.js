@@ -53,14 +53,8 @@ function userLoggedIn(response) {
   return false;
 }
 
-// TODO: remove the logs
 // needs a pre populated req, res obj
 function userBelongsToUrl(request, response, database) {
-  console.log("response.locals", typeof response.locals);
-  console.log("response.locals.user", typeof response.locals.user);
-  console.log("response.locals.user.id", response.locals.user.id);
-  console.log(database[request.params.shortURL]);
-  console.log("are they equal?", database[request.params.shortURL].userid === response.locals.user.id)
   if(response.locals.user.id === database[request.params.shortURL].userid) {
     return true;
   }

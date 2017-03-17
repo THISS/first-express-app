@@ -18,7 +18,13 @@ app.set('view engine', 'ejs');
 
 // The MiddleWare Begins
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieSession());
+app.use(cookieSession({
+  name: 'session',
+  keys: ["bacon", "mac", "cheese"],
+
+  // Cookie Options
+  maxAge: 20 * 60 * 1000 // 20 minutes
+}));
 // My template vars and cookies
 app.use((req, res, next) => {
   res.locals.userLoggedIn = false;

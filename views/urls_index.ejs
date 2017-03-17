@@ -5,6 +5,7 @@
   </head>
   <body>
     <% include partials/_header.ejs %>
+    <% if(urlDatabase) { %>
     <ul>
     <% for(let shortURL in urlDatabase) { %>
       <li>
@@ -18,5 +19,8 @@
       </li>
     <% } %>
     </ul>
+    <% }else { %>
+    <h3>Sorry - you must <a href="/register">Sign Up</a> or <a href="/login">Log In</a> to use TinyURL</h3>
+    <% } %>
   </body>
 </html>

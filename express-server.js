@@ -43,18 +43,21 @@ app.use((req, res, next) => {
 // The URL Database that will allllllllways persist these three urls 
 // When delete has not been used
 const urlDatabase = {
-  "userRandomID": {
-    {
-      "b2xVn2": "http://www.lighthouselabs.ca"
-    },
-    {
-      "9sm5xL": "http://www.castawayswatersports.com"
-    }
-  },
-  "userRandomID2":{
-    {"9sm5xK": "http://www.google.com"}
-  }
+      "b2xVn2": {url: "http://www.lighthouselabs.ca", userid: "userRandomID"},
+      "9sm5xL": {url: "http://www.castawayswatersports.com", userid: "userRandomID"},
+      "9sm5xK": {url: "http://www.google.com", userid: "userRandomID"}
 };
+
+// Helper function to get the users URLs
+function urlsForUserId(userID) {
+  const userURLS = {};
+  for(let key in urlDatabase) {
+    if(userID === urlDatabase[key].userid) {
+      userURLS[key] = urlDatabase[key].url;
+    }
+  }
+  return userURLS;
+}
 
 // User Database - if User email or User id is modified
 // modify the same in userEmailDatabase
@@ -81,15 +84,9 @@ const userEmailDatabase = {
 
 // redirect our client to the URL in our URL DB
 app.get('/u/:shortURL', (req, res) => {
-  let longURL = urlDatabase[req.params.shortURL];
+  let longURL = urlDatabase[req.params.shortURL].url;
   // console.log(longURL);
   res.redirect(longURL);
-});
-
-// Our Homepage
-app.get("/", (req, res) => {
-    res.locals.urlDatabase = urlDatabase;
-  res.render("urls_index");
 });
 
 app.get("/login", (req, res) => {
@@ -160,7 +157,6 @@ app.post("/register", (req, res) => {
 
     // Add email to id Lookup
     userEmailDatabase[form.email] = userID;
-
     // Set user_id as cookie
     res.cookie('user_id', userID);
     // Clear attempts cookie
@@ -171,11 +167,6 @@ app.post("/register", (req, res) => {
   }
   // if either emil or password not supplied render to 400 page
   res.status(400).redirect('400');
-});
-
-// Our REST implementation
-app.get("/urls.json", (req, res) => {
-  res.json(urlDatabase);
 });
 
 // Create a new tinyURL by getting this form
@@ -189,44 +180,73 @@ app.get("/urls/new", (req, res) => {
 
 // Create a new tinyURL by posting here
 app.post("/urls", (req, res) => {
-  // console.log(req.body);
-  const bigURL = req.body.longURL;
-  const randURL = generateRandomString();
-  urlDatabase[res.locals.user.id] = {randURL: bigURL};
-  res.redirect(`/urls/${randURL}`);
+  if(res.locals.user.id){
+    const bigURL = req.body.longURL;
+    const randURL = generateRandomString();
+    urlDatabase[randURL] = {url: bigURL, userid: res.locals.user.id};
+    res.redirect(`/urls/${randURL}`);
+  }
+  res.redirect('/');
+});
+
+// Our Homepage
+app.get("/", (req, res) => {
+  if(res.locals.user.id){
+    const userURLS = urlsForUserId(res.locals.user.id);
+  }
+  res.locals.urlDatabase = userURLS || null;
+  res.render("urls_index");
 });
 
 // List all the URLs
 app.get("/urls", (req, res) => {
-  res.locals.urlDatabase = urlDatabase;
+  if(res.locals.user.id){
+    const userURLS = urlsForUserId(res.locals.user.id);
+  }
+  res.locals.urlDatabase = userURLS || null;
   res.render("urls_index");
 });
 
 // Show a tinyURL and allow user to edit the original
 app.get("/urls/:shortURL", (req, res) => {
   const short = req.params.shortURL;
-  res.locals.shortURL = short;
-  res.locals.bigURL = urlDatabase[short];
-  res.render("urls_show");
+  if(res.locals.user.id && res.locals.user.id === urlDatabase[short].userid) {
+    res.locals.shortURL = short;
+    res.locals.bigURL = urlDatabase[short].url;
+    res.render("urls_show");
+  }
+  res.redirect("/");
 });
 
 // Update the Long or Original of the specified URL
 app.post("/urls/:shortURL", (req, res) => {
   const short = req.params.shortURL;
-  const big = req.body.update_input;
-  urlDatabase[short] = big;
-  res.redirect("/urls/" + short);
+  if(res.locals.user.id && res.locals.user.id === urlDatabase[short].userid) {
+    const big = req.body.update_input;
+    urlDatabase[short].url = big;
+    res.redirect("/urls/" + short);
+  }
+  res.redirect('/');
 });
 
 // Delete the specified URL
 app.post("/urls/:shortURL/delete", (req, res) => {
-  delete urlDatabase[req.params.shortURL];
-  res.redirect("/urls");
+  const short = req.params.shortURL;
+  if(res.locals.user.id && res.locals.user.id === urlDatabase[short].userid) {
+    delete urlDatabase[short];
+    res.redirect("/urls");
+  }
+  res.redirect('/');
 });
 
 // a Nod to technology buffs everywhere
 app.get("/hello", (req, res) => {
   res.end("<html><body>Hello <b>World</b></body></html>\n");
+});
+
+// Our REST implementation
+app.get("/urls.json", (req, res) => {
+  res.json(urlDatabase);
 });
 
 app.listen(PORT, () => {

@@ -4,7 +4,7 @@ const express = require("express");
 const PORT = process.env.PORT || 8080; // default port 8080
 const app = express();
 const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
+const cookieSession = require('cookie-session');
 const userRouter = require("./routes/user");
 const urlRouter = require("./routes/urls");
 const helper = require("./helpers/helper_functions");
@@ -18,25 +18,23 @@ app.set('view engine', 'ejs');
 
 // The MiddleWare Begins
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
+app.use(cookieSession());
 // My template vars and cookies
 app.use((req, res, next) => {
   res.locals.userLoggedIn = false;
-  if(req.cookies.user_id && helper.idCheck(req.cookies.user_id, userDatabase)) {
-    console.log("user_id", req.cookies.user_id);
-    const user = userDatabase[req.cookies.user_id];
-    console.log("user object", user);
+  if(req.session.user_id && helper.idCheck(req.session.user_id, userDatabase)) {
+    const user = userDatabase[req.session.user_id];
     if(user.email) {
       res.locals.user = user;
       res.locals.userLoggedIn = true;
     }
   }
-  if(req.cookies.error && req.cookies.prev_path === req.path) {
-    res.locals.error = req.cookies.error;
+  if(req.session.error && req.session.prev_path === req.path) {
+    res.locals.error = req.session.error;
   }else {
     res.locals.error = "";
   }
-  res.cookie("prev_path", req.path);
+  req.session.prev_path = req.path;
   next();
 });
 

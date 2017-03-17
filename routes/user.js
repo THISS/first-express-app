@@ -19,26 +19,26 @@ router.post("/login", (req, res) => {
   if(res.locals.userLoggedIn){
     res.render("login_user");
   }
-  res.clearCookie("error");
+  req.session.error = null;
   if(req.body.email && req.body.password) {
     const email = req.body.email;
     const userID = userEmailDatabase[email];
     if(userID) {
       const password = userDatabase[userID].passhash;
       if(helper.bcrypt.compareSync(req.body.password, password)){
-        res.cookie("user_id", userID);
+        req.session.user_id = userID;
         res.redirect('/');
         return;
       }
     }
   }
-  res.cookie("error", "Email or Password are incorrect");
+  req.session.error = "Email or Password are incorrect";
   res.status(403).redirect('/login');
 });
 
 // Logout
 router.post("/logout", (req, res) => {
-  res.clearCookie("user_id");
+  req.session.user_id = null;
   res.redirect('/');
 });
 
@@ -51,7 +51,7 @@ router.get("/register", (req, res) => {
 });
 
 router.post("/register", (req, res) => {
-  res.clearCookie("error");
+  req.session.error = null;
   if(res.locals.userLoggedIn) {
     res.redirect("/");
   }
@@ -74,9 +74,7 @@ router.post("/register", (req, res) => {
     // Add email to id Lookup
     userEmailDatabase[form.email] = userID;
     // Set user_id as cookie
-    res.cookie('user_id', userID);
-    // Clear attempts cookie
-    res.clearCookie("attempts");
+    req.session.user_id = userID;
     // redirect to '/' path 
     res.redirect('/');
     return;

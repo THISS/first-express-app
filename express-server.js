@@ -103,7 +103,7 @@ app.post("/login", (req, res) => {
     }
   }
   res.cookie("error", "Email or Password are incorrect");
-  res.redirect('/login');
+  res.status(403).redirect('/login');
 });
 
 // Logout
@@ -114,7 +114,7 @@ app.post("/logout", (req, res) => {
 
 // Registration form
 app.get("/register", (req, res) => {
-  if(res.locals.username){
+  if(res.locals.user.id){
     res.redirect('/');
   }
   res.render('register_user');
@@ -131,7 +131,7 @@ function emailCheck(emailAddress) {
 
 app.post("/register", (req, res) => {
   res.clearCookie("error");
-  if(res.locals.username) {
+  if(res.locals.user.id) {
     res.redirect("/");
   }
   const form = req.body;
@@ -162,7 +162,7 @@ app.post("/register", (req, res) => {
     return;
   }
   // if either emil or password not supplied render to 400 page
-  res.status(400).render('400');
+  res.status(400).redirect('400');
 });
 
 // Our REST implementation

@@ -68,7 +68,7 @@ router.post("/register", (req, res) => {
     userDatabase[userID] = {
       id: userID,
       email: form.email,
-      passhash: helper.bcrypt.hashSync(form.password, 10);
+      passhash: helper.bcrypt.hashSync(form.password, 10)
     };
 
     // Add email to id Lookup

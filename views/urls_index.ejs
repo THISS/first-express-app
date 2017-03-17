@@ -19,8 +19,10 @@
       </li>
     <% } %>
     </ul>
-    <% }else { %>
+    <% }else if(typeof user === "undefined" || typeof user.id === "undefined") {%>
     <h3>Sorry - you must <a href="/register">Sign Up</a> or <a href="/login">Log In</a> to use TinyURL</h3>
+    <% } else {%>
+    <h3>Hey, you should get some URLs linked to by starting <a href="/urls/new">HERE</a></h3>
     <% } %>
   </body>
 </html>

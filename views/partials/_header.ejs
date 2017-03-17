@@ -1,4 +1,4 @@
-<% if(typeof user === "undefined") { %>
+<% if(typeof user === "undefined" || typeof user.id === "undefined") { %>
   <a href="/login">LogIN</a> | <a href="/register">SignUP</a>
 <% }else { %>
 <h2><%= user.email %></h2>

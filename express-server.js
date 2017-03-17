@@ -54,6 +54,7 @@ function urlsForUserId(userID) {
   for(let key in urlDatabase) {
     if(userID === urlDatabase[key].userid) {
       userURLS[key] = urlDatabase[key].url;
+      console.log(urlDatabase[key]);
     }
   }
   return userURLS;
@@ -90,7 +91,10 @@ app.get('/u/:shortURL', (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  res.render("login_user");
+  if(){
+    res.render("login_user");
+  }
+  res.redirect("/");
 });
 // Login via post
 app.post("/login", (req, res) => {
@@ -180,10 +184,10 @@ app.get("/urls/new", (req, res) => {
 
 // Create a new tinyURL by posting here
 app.post("/urls", (req, res) => {
-  if(typeof res.locals.user !== "undefined"){
+  if(typeof res.locals.user !== "undefined" && typeof res.locals.user.id !== "undefined"){
     const bigURL = req.body.longURL;
     const randURL = generateRandomString();
-    urlDatabase[randURL] = {url: bigURL, userid: typeof res.locals.user !== "undefined"};
+    urlDatabase[randURL] = {url: bigURL, userid: res.locals.user.id};
     res.redirect(`/urls/${randURL}`);
   }
   res.redirect('/');
@@ -192,7 +196,7 @@ app.post("/urls", (req, res) => {
 // Our Homepage
 app.get("/", (req, res) => {
   let userURLS = {};
-  if(typeof res.locals.user !== "undefined"){
+  if(typeof res.locals.user !== "undefined" || typeof res.locals.user.id !== "undefined"){
     userURLS = urlsForUserId(typeof res.locals.user !== "undefined");
   }
   res.locals.urlDatabase = userURLS;

@@ -5,24 +5,24 @@
   </head>
   <body>
     <% include partials/_header.ejs %>
-    <% if(typeof urlDatabase.shortURL !== "undefined") { %>
+    <% if(typeof urlDatabase !== "undefined" && urlDatabase.length > 0) { %>
     <ul>
-    <% for(let shortURL in urlDatabase) { %>
+    <% for(let urlObj of urlDatabase) { %>
       <li>
-          <form action="/urls/<%= shortURL %>/delete" method="POST">
+          <form action="/urls/<%= urlObj.shortURL %>/delete" method="POST">
             <label>
-              <a href="/urls/<%= shortURL %>"><%= urlDatabase[shortURL] %></a>
-              <a href="/urls/<%= shortURL %>">Edit</a>
+              <a href="/urls/<%= urlObj.shortURL %>"><%= urlObj.longURL %></a>
+              <a href="/urls/<%= urlObj.shortURL %>">Edit</a>
               <input type="submit" name="delete_input" value="X">
             </label>
           </form>
       </li>
     <% } %>
     </ul>
-    <% }else if(typeof user === "undefined" || typeof user.id === "undefined") {%>
-    <h3>Sorry - you must <a href="/register">Sign Up</a> or <a href="/login">Log In</a> to use TinyURL</h3>
+    <% }else if(userLoggedIn) {%>
+      <h3>Hey, you should get some URLs linked to by starting <a href="/urls/new">HERE</a></h3>
     <% } else {%>
-    <h3>Hey, you should get some URLs linked to by starting <a href="/urls/new">HERE</a></h3>
+      <h3>Sorry - you must <a href="/register">Sign Up</a> or <a href="/login">Log In</a> to use TinyURL</h3>
     <% } %>
   </body>
 </html>

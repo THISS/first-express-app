@@ -10,11 +10,15 @@ function generateRandomString() {
 
 // Get the users URLs
 function urlsForUserId(userID, urlDatabase) {
-  const userURLS = {};
+  const userURLS = [];
   for(let key in urlDatabase) {
-    if(userID === urlDatabase[key].userid) {
-      userURLS[key] = urlDatabase[key].url;
-      console.log(urlDatabase[key]);
+    if(urlDatabase.hasOwnProperty(key)) {
+      if(userID === urlDatabase[key].userid) {
+        userURLS.push({
+          shortURL: key,
+          longURL: urlDatabase[key].url
+        });
+      }
     }
   }
   return userURLS;
@@ -24,6 +28,15 @@ function urlsForUserId(userID, urlDatabase) {
 // returns true if it exists
 function emailCheck(emailAddress, userEmailDatabase) {
   if(userEmailDatabase[emailAddress]) {
+    return true;
+  }
+  return false;
+}
+
+// Check User ID
+// returns true if it exists
+function idCheck(userID, userDatabase) {
+  if(userDatabase[userID]) {
     return true;
   }
   return false;
@@ -44,5 +57,6 @@ module.exports = {
   generateRandomString: generateRandomString, 
   urlsForUserId: urlsForUserId,
   emailCheck: emailCheck,
-  userLoggedIn: userLoggedIn
+  userLoggedIn: userLoggedIn,
+  idCheck: idCheck
 };

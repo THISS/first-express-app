@@ -8,7 +8,7 @@ const userEmailDatabase = require("../data/databases").userEmailDatabase;
 
 // The login form page
 router.get("/login", (req, res) => {
-  if(helper.userLoggedIn(res)){
+  if(res.locals.userLoggedIn){
     res.redirect("/");
   }
   res.render("login_user");
@@ -16,7 +16,7 @@ router.get("/login", (req, res) => {
 
 // Login via post
 router.post("/login", (req, res) => {
-  if(helper.userLoggedIn(res)){
+  if(res.locals.userLoggedIn){
     res.render("login_user");
   }
   res.clearCookie("error");
@@ -44,7 +44,7 @@ router.post("/logout", (req, res) => {
 
 // Registration form
 router.get("/register", (req, res) => {
-  if(helper.userLoggedIn(res)){
+  if(res.locals.userLoggedIn){
     res.redirect('/');
   }
   res.render('register_user');
@@ -52,7 +52,7 @@ router.get("/register", (req, res) => {
 
 router.post("/register", (req, res) => {
   res.clearCookie("error");
-  if(helper.userLoggedIn(res)) {
+  if(res.locals.userLoggedIn) {
     res.redirect("/");
   }
   const form = req.body;

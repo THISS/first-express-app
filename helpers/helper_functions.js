@@ -27,6 +27,19 @@ function urlsForUserId(userID, urlDatabase) {
   return userURLS;
 }
 
+// TODO:
+// create result array (empty)
+// check for email
+// if not found return result (empty array)
+// else if found loop the array
+// check iterator against urlDatabase and push to result
+// return result
+
+// TODO:
+// check for email in the link db
+// if not found create it with an empty array
+// add shortURL to the userid via push
+
 // Check emails
 // returns true if it exists
 function emailCheck(emailAddress, userEmailDatabase) {

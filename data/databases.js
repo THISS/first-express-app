@@ -27,7 +27,7 @@ const userDatabase = {
 const userEmailDatabase = {
   "a@g.com": "userRandomID",
   "useremail2@g.com": "userRandomID2"
-}
+};
 
 module.exports = {
   urlDatabase: urlDatabase, 

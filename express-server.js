@@ -11,8 +11,6 @@ const helper = require("./helpers/helper_functions");
 
 // Databases
 const userDatabase = require("./data/databases").userDatabase;
-const urlDatabase = require("./data/databases").urlDatabase;
-const userEmailDatabase = require("./data/databases").userEmailDatabase;
 
 // Tell express to look for the ejs file extension
 // and render with ejs module

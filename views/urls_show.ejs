@@ -8,7 +8,7 @@
     <h1>ShortURL: <%= shortURL %></h1>
     <form action="/urls/<%= shortURL %>" method="POST">
       <label>
-        <input type="text" name="update_input" size="<%= bigURL.length %>"value="<%= bigURL %>">
+        <input type="text" name="update_input" size="40" value="<%= bigURL %>">
         <input type="submit" value="Update URL">
       </label>
     </form>

@@ -25,9 +25,9 @@ app.use(cookieParser());
 app.use((req, res, next) => {
   res.locals.userLoggedIn = false;
   if(req.cookies.user_id && helper.idCheck(req.cookies.user_id, userDatabase)) {
-      console.log("user_id", req.cookies.user_id);
+    console.log("user_id", req.cookies.user_id);
     const user = userDatabase[req.cookies.user_id];
-    console.log("before", user);
+    console.log("user object", user);
     if(user.email) {
       res.locals.user = user;
       res.locals.userLoggedIn = true;

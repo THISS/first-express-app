@@ -43,9 +43,17 @@ app.use((req, res, next) => {
 // The URL Database that will allllllllways persist these three urls 
 // When delete has not been used
 const urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com",
-  "9sm5xL": "http://www.castawayswatersports.com"
+  "userRandomID": {
+    {
+      "b2xVn2": "http://www.lighthouselabs.ca"
+    },
+    {
+      "9sm5xL": "http://www.castawayswatersports.com"
+    }
+  },
+  "userRandomID2":{
+    {"9sm5xK": "http://www.google.com"}
+  }
 };
 
 // User Database - if User email or User id is modified
@@ -172,7 +180,11 @@ app.get("/urls.json", (req, res) => {
 
 // Create a new tinyURL by getting this form
 app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
+  if(res.locals.user.id){
+    res.render("urls_new");
+    return;
+  }
+  res.redirect('/');
 });
 
 // Create a new tinyURL by posting here
@@ -180,7 +192,7 @@ app.post("/urls", (req, res) => {
   // console.log(req.body);
   const bigURL = req.body.longURL;
   const randURL = generateRandomString();
-  urlDatabase[randURL] = bigURL;
+  urlDatabase[res.locals.user.id] = {randURL: bigURL};
   res.redirect(`/urls/${randURL}`);
 });
 

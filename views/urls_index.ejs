@@ -5,7 +5,7 @@
   </head>
   <body>
     <% include partials/_header.ejs %>
-    <% if(urlDatabase) { %>
+    <% if(typeof urlDatabase.shortURL !== "undefined") { %>
     <ul>
     <% for(let shortURL in urlDatabase) { %>
       <li>

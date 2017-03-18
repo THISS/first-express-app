@@ -11,7 +11,7 @@
     <% for(let urlObj of urlDatabase) { %>
       <li>
             <%= urlObj.longURL %>
-          <form action="/urls/<%= urlObj.shortURL %>/delete" method="POST" style="display: inline-block">
+          <form action="/urls/<%= urlObj.shortURL %>?_method=DELETE" method="POST" style="display: inline-block">
             <button><a href="/urls/<%= urlObj.shortURL %>">Edit</a></button>
             <input type="submit" name="delete_input" value="X">
           </form>

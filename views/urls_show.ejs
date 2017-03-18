@@ -6,13 +6,13 @@
   <body>
     <% include partials/_header.ejs %>
     <h1>ShortURL: <%= shortURL %></h1>
-    <form action="/urls/<%= shortURL %>" method="POST" style="display: inline-block">
+    <form action="/urls/<%= shortURL %>?_method=PUT" method="POST" style="display: inline-block">
       <label>
         <input type="text" name="update_input" size="40" value="<%= bigURL %>">
         <input type="submit" value="Update URL">
       </label>
     </form>
-    <form action="/urls/<%= shortURL %>/delete" method="post" style="display: inline-block" >
+    <form action="/urls/<%= shortURL %>?_method=DELETE" method="post" style="display: inline-block" >
       <input type="submit" value="X" />
     </form>
   </body>

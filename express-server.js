@@ -8,6 +8,7 @@ const cookieSession = require('cookie-session');
 const userRouter = require("./routes/user");
 const urlRouter = require("./routes/urls");
 const helper = require("./helpers/helper_functions");
+const methodOverride = require("method-override");
 
 // Databases
 const userDatabase = require("./data/databases").userDatabase;
@@ -17,7 +18,10 @@ const userDatabase = require("./data/databases").userDatabase;
 app.set('view engine', 'ejs');
 
 // The MiddleWare Begins
+// serve static files (images)
 app.use(express.static("public"));
+// Change form methods when needed with POST having ?_method=DELETE
+app.use(methodOverride("_method"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieSession({
   name: 'session',

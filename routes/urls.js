@@ -53,7 +53,6 @@ router.get("/urls", (req, res) => {
     res.locals.urlDatabase = helper.urlsForUserId(res.locals.user.id, urlDatabase);
     res.render("urls_index");
     return;
-    // TODO: remove the link around the long url
     // TODO: add a date created
     // TODO: add a counter of visits
     // TODO: number of "Unique Visits"
@@ -88,7 +87,8 @@ router.get("/urls/:shortURL", (req, res) => {
 });
 
 // Update the Long or Original of the specified URL
-router.post("/urls/:shortURL", (req, res) => {
+// TODO: Changed to PUT
+router.put("/urls/:shortURL", (req, res) => {
   if(res.locals.userLoggedIn) {
     if(helper.userBelongsToUrl(req, res, urlDatabase)) {
       // Check if the short url exists
@@ -111,7 +111,7 @@ router.post("/urls/:shortURL", (req, res) => {
 });
 
 // Delete the specified URL
-router.post("/urls/:shortURL/delete", (req, res) => {
+router.delete("/urls/:shortURL", (req, res) => {
   if(res.locals.userLoggedIn && helper.userBelongsToUrl(req, res, urlDatabase)) {
     const short = req.params.shortURL;
     delete urlDatabase[short];

@@ -18,14 +18,14 @@ router.get("/login", (req, res) => {
 // Login via post
 router.post("/login", (req, res) => {
   if(res.locals.userLoggedIn){
-    res.render("login_user");
+    res.redirect("/");
     return;
   }
   req.session.error = null;
   if(req.body.email && req.body.password) {
     const email = req.body.email;
     const userID = userEmailDatabase[email];
-    if(userID) {
+    if(userID && userDatabase[userID]) {
       const password = userDatabase[userID].passhash;
       if(helper.bcrypt.compareSync(req.body.password, password)){
         req.session.user_id = userID;
@@ -35,9 +35,9 @@ router.post("/login", (req, res) => {
     }
   }
   req.session.error = "Email or Password are incorrect";
-  res.status(403).redirect('/login');
+  res.status(401).render("401");
 });
-
+// TODO: make a 401 error page
 // Logout
 router.post("/logout", (req, res) => {
   req.session.user_id = null;
@@ -64,7 +64,8 @@ router.post("/register", (req, res) => {
   if(form.email && form.password) {
     // If the users email is already registered 
     if(helper.emailCheck(form.email, userEmailDatabase)) {
-      res.status(400).render('400');
+      req.session.error = "Sorry, email is already taken";
+      res.status(400).render("400");
       return;
     }
     // Generate a new userRandomID
@@ -84,8 +85,9 @@ router.post("/register", (req, res) => {
     res.redirect('/');
     return;
   }
-  // if either emil or password not supplied render to 400 page
-  res.status(400).redirect('400');
+  // if either email or password not supplied render to 400 page
+  req.session.error = "You need to have enter an email and a password";
+  res.status(400).render("400");
 });
 
 module.exports = router;

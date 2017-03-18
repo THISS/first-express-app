@@ -2,6 +2,7 @@
   <a href="/login">LogIN</a> | <a href="/register">SignUP</a>
 <% }else { %>
 <h2><%= user.email %></h2>
+<h4><a href="/urls">My Links</a></h4>
 <form action="/logout" method="post">
   <input type="submit" value="Sign Out">
 </form>

@@ -11,6 +11,9 @@
         <input type="text" name="update_input" size="40" value="<%= bigURL %>">
         <input type="submit" value="Update URL">
       </label>
+      <form action="/urls/<%= shortURL %>/delete" method="post" >
+        <button type="submit" value="X"></button>
+      </form>
     </form>
   </body>
 </html>

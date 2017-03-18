@@ -22,14 +22,17 @@ function tinyUrlCheck(shortURL, urlDatabase) {
 }
 
 // Get the users URLs
-function urlsForUserId(userID, urlDatabase) {
+function urlsForUserId(userID, urlDatabase, statDatabase) {
   const userURLS = [];
   for(let key in urlDatabase) {
     if(urlDatabase.hasOwnProperty(key)) {
       if(userID === urlDatabase[key].userid) {
         userURLS.push({
           shortURL: key,
-          longURL: urlDatabase[key].url
+          longURL: urlDatabase[key].url,
+          dateCreated: urlDatabase[key].datecreated,
+          numVisits: this.getStats(key, statDatabase).length,
+          numUniqueVisits: this.getUniqueCount(key, statDatabase)
         });
       }
     }
@@ -102,12 +105,21 @@ function setUrlTracker(shortURL, uniqueID, database) {
   }
   database.stats[shortURL].push({
     userID: uniqueID,
-    timestamp: Date.now();
+    timestamp: Date.now()
   });
 }
 // checkUniqueUser
 function checkUniqueUser(shortURL, uniqueID, database) {
   database.unique[shortURL][uniqueID] = 1;
+}
+
+// getUnique count
+function getUniqueCount(shortURL, statDatabase) {
+  return statDatabase.unique[shortURL].keys().length;
+}
+// getstats
+function getStats(shortURL, statDatabase) {
+  return statDatabase.stats[shortURL];
 }
 
 module.exports = {
@@ -121,5 +133,7 @@ module.exports = {
   userBelongsToUrl: userBelongsToUrl,
   userTracker: userTracker,
   setUrlTracker: setUrlTracker,
-  checkUniqueUser: checkUniqueUser
+  checkUniqueUser: checkUniqueUser,
+  getUniqueCount: getUniqueCount,
+  getStats: getStats
 };

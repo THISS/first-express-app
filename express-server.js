@@ -1,7 +1,7 @@
 'use strict';
 // Our Controlling Variables - pre hoisted ;)
 const express = require("express");
-const PORT = process.env.PORT || 8080; // default port 8080
+const PORT = process.env.PORT || 3000; // default port 8080
 const app = express();
 const bodyParser = require('body-parser');
 const cookieSession = require('cookie-session');
@@ -28,7 +28,6 @@ app.use(cookieParser());
 app.use(cookieSession({
   name: 'session',
   keys: ["bacon", "mac", "cheese"],
-
   // Cookie Options
   maxAge: 20 * 60 * 1000 // 20 minutes
 }));

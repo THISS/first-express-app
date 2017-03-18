@@ -15,5 +15,10 @@
     <form action="/urls/<%= shortURL %>?_method=DELETE" method="post" style="display: inline-block" >
       <input type="submit" value="X" />
     </form>
+    <div>Date Created: <%= Date(dateCreated) %> | Unique Visitors: <%= uCount %></div>
+    USER ID \t Visited Date
+    <% for(let i = 0; i < stats.length; ++i) { %>
+      <%= stats[i].userID \t stats[i].timestamp %>
+    <% } %>
   </body>
 </html>

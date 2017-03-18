@@ -15,6 +15,7 @@
             <button><a href="/urls/<%= urlObj.shortURL %>">Edit</a></button>
             <input type="submit" name="delete_input" value="X">
           </form>
+          <div>Date Created: <%= Date(urlObj.dateCreated) %> | Number of Visits: <%= urlObj.numVisits %> | Unique Visitors: <%= urlObj.numUniqueVisits %></div>
       </li>
     <% } %>
     </ul>

@@ -12,11 +12,12 @@ router.get('/u/:shortURL', (req, res) => {
   // if the shortURL exists redirect to the long url otherwise render a 404
   const shortURL = req.params.shortURL;
   if(helper.tinyUrlCheck(shortURL, urlDatabase)){
-    // TODO: urlcount will be an array of objects 2 keys userid and timestamp
-    // TODO: uniqueURLcount url will be a key with an object that will be a letter count of userids with one as the value (obj.keys().length)
-    // TODO: Check if user has url cookie one user can visit many websites (letter count) give them one if they don't have one
-    // TODO: the function will do all of the above in a setter env
-    // TODO: a second function will be used to get the unique count
+    const uniqueID = helper.userTracker(req, res);
+    // uniqueURLcount url will be a shortURL with an object 
+    // that will be a letter count of userids with one as the value (obj.keys().length)
+    helper.checkUniqueUser(shortURL, uniqueID, trackingDatabase);
+    // a second function will be used to get the unique count
+    helper.setUrlTracker(shortURL, uniqueID, trackingDatabase);
     let longURL = urlDatabase[shortURL].url;
     res.redirect(longURL);
     return;
@@ -42,7 +43,7 @@ router.post("/urls", (req, res) => {
   if(res.locals.userLoggedIn){
     const bigURL = req.body.longURL;
     const shortURL = helper.generateRandomString();
-    urlDatabase[shortURL] = {url: bigURL, userid: res.locals.user.id};
+    urlDatabase[shortURL] = {url: bigURL, userid: res.locals.user.id, datecreated: Date.now()};
     res.redirect(`/urls/${shortURL}`);
     return;
   }
@@ -62,12 +63,10 @@ router.get("/", (req, res) => {
 // List all the URLs
 router.get("/urls", (req, res) => {
   if(res.locals.userLoggedIn){
-    res.locals.urlDatabase = helper.urlsForUserId(res.locals.user.id, urlDatabase);
+    res.locals.urlDatabase = helper.urlsForUserId(res.locals.user.id, urlDatabase, trackingDatabase);
+    // number of visits, number of unique visits
     res.render("urls_index");
     return;
-    // TODO: add a date created
-    // TODO: add a counter of visits
-    // TODO: number of "Unique Visits"
   }
   res.status(401).render("401");
 });
@@ -82,9 +81,13 @@ router.get("/urls/:shortURL", (req, res) => {
       if(helper.tinyUrlCheck(short, urlDatabase)) {
         res.locals.shortURL = short;
         res.locals.bigURL = urlDatabase[short].url;
-        // TODO: date created
-        // TODO: number of visits
-        // TODO: number of unique visits
+        res.locals.dateCreated = urlDatabase[short].datecreated;
+        res.locals.stats = helper.getStats(short, trackingDatabase);
+        res.locals.uCount = helper.getUniqueCount(short, trackingDatabase);
+    //  add a date created
+    //  add a counter of visits
+    // add a counter of uniques
+    // set res.locals.stats .counts .unique .usr/time
         res.render("urls_show");
         return;
       }

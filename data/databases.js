@@ -1,9 +1,9 @@
 // The URL Database that will allllllllways persist these three urls 
 // When delete has not been used
 const urlDatabase = {
-      "b2xVn2": {url: "http://www.lighthouselabs.ca", userid: "userRandomID"},
-      "9sm5xL": {url: "http://www.castawayswatersports.com", userid: "userRandomID"},
-      "9sm5xK": {url: "http://www.google.com", userid: "userRandomID"}
+      "b2xVn2": {url: "http://www.lighthouselabs.ca", userid: "userRandomID", datecreated: Date.now()},
+      "9sm5xL": {url: "http://www.castawayswatersports.com", userid: "userRandomID", datecreated: Date.now()},
+      "9sm5xK": {url: "http://www.google.com", userid: "userRandomID", datecreated: Date.now()}
 };
 
 // User Database - if User email or User id is modified

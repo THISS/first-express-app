@@ -21,6 +21,7 @@ router.get('/u/:shortURL', (req, res) => {
     // a second function will be used to get the unique count
     helper.setUrlTracker(shortURL, uniqueID, trackingDatabase);
     let longURL = urlDatabase[shortURL].url;
+    // TODO: make a well formed (http://)url making sure it has http:// or https:// at front
     res.redirect(longURL);
     return;
   }

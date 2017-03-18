@@ -111,7 +111,7 @@ function setUrlTracker(shortURL, uniqueID, database) {
 // checkUniqueUser
 function checkUniqueUser(shortURL, uniqueID, database) {
   if(!database.unique[shortURL]){
-    database.unique[shortURL] = 0;
+    database.unique[shortURL] = {};
   }
   database.unique[shortURL][uniqueID] = 1;
 }
@@ -119,7 +119,9 @@ function checkUniqueUser(shortURL, uniqueID, database) {
 // getUnique count
 function getUniqueCount(shortURL, statDatabase) {
   if(statDatabase.unique[shortURL]) {
-    return statDatabase.unique[shortURL].keys().length;
+    // get unique keys (user ids) from our url object
+    const keys = Object.keys(statDatabase.unique[shortURL]);
+    return keys.length;
   }
   return 0;
 }

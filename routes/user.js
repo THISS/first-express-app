@@ -12,6 +12,8 @@ router.get("/login", (req, res) => {
     res.redirect("/");
     return;
   }
+  // TODO: Check if the middleware can do this
+  // res.locals.error = req.sessions.error;
   res.render("login_user");
 });
 
@@ -21,7 +23,6 @@ router.post("/login", (req, res) => {
     res.redirect("/");
     return;
   }
-  req.session.error = null;
   if(req.body.email && req.body.password) {
     const email = req.body.email;
     const userID = userEmailDatabase[email];
@@ -37,7 +38,6 @@ router.post("/login", (req, res) => {
   req.session.error = "Email or Password are incorrect";
   res.status(401).render("401");
 });
-// TODO: make a 401 error page
 // Logout
 router.post("/logout", (req, res) => {
   req.session.user_id = null;
@@ -50,11 +50,12 @@ router.get("/register", (req, res) => {
     res.redirect('/');
     return;
   }
+  // TODO: Check if the middleware can do this
+  // res.locals.error = req.sessions.error;
   res.render('register_user');
 });
 
 router.post("/register", (req, res) => {
-  req.session.error = null;
   if(res.locals.userLoggedIn) {
     res.redirect("/");
     return;
@@ -64,7 +65,8 @@ router.post("/register", (req, res) => {
   if(form.email && form.password) {
     // If the users email is already registered 
     if(helper.emailCheck(form.email, userEmailDatabase)) {
-      req.session.error = "Sorry, email is already taken";
+      const error = "Sorry, email is already taken";
+      req.session.error = error;
       res.status(400).render("400");
       return;
     }
@@ -86,7 +88,8 @@ router.post("/register", (req, res) => {
     return;
   }
   // if either email or password not supplied render to 400 page
-  req.session.error = "You need to have enter an email and a password";
+  const error = "You need to have enter an email and a password";
+  req.session.error = error;
   res.status(400).render("400");
 });
 

@@ -22,7 +22,7 @@ router.get("/urls/new", (req, res) => {
   }
   // TODO: Make sure view can render the message and a link to login
   req.session.error = "Sorry, you will need to log in to generate a tinyURL";
-  res.status(401).render("urls_index");
+  res.status(401).render("401");
 });
 
 // Create a new tinyURL by posting here
@@ -34,7 +34,8 @@ router.post("/urls", (req, res) => {
     res.redirect(`/urls/${shortURL}`);
     return;
   }
-  res.status(401).render("urls_index");
+  req.session.error = "You need to log in to post website links";
+  res.status(401).render("401");
 });
 
 // Our Homepage

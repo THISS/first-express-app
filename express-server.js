@@ -40,6 +40,7 @@ app.use((req, res, next) => {
   }else {
     res.locals.error = "";
   }
+  req.session.error = null;
   req.session.prev_path = req.path;
   next();
 });

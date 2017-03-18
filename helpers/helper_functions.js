@@ -11,6 +11,12 @@ function generateRandomString() {
   return result.join('');
 }
 
+// tinyURL Check
+
+// see if the shortURL is in the urlDatabase
+// if it is then return true
+// otherwise return false
+
 // Get the users URLs
 function urlsForUserId(userID, urlDatabase) {
   const userURLS = [];

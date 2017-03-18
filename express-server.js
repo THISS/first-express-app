@@ -5,6 +5,7 @@ const PORT = process.env.PORT || 8080; // default port 8080
 const app = express();
 const bodyParser = require('body-parser');
 const cookieSession = require('cookie-session');
+const cookieParser = require('cookie-parser');
 const userRouter = require("./routes/user");
 const urlRouter = require("./routes/urls");
 const helper = require("./helpers/helper_functions");
@@ -23,6 +24,7 @@ app.use(express.static("public"));
 // Change form methods when needed with POST having ?_method=DELETE
 app.use(methodOverride("_method"));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(cookieSession({
   name: 'session',
   keys: ["bacon", "mac", "cheese"],

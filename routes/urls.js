@@ -5,13 +5,23 @@ const helper = require("../helpers/helper_functions.js");
 const userDatabase = require("../data/databases").userDatabase;
 const userEmailDatabase = require("../data/databases").userEmailDatabase;// Databases
 const urlDatabase = require("../data/databases").urlDatabase;
+const trackingDatabase = require("../data/databases").trackingDatabase;
 
 // redirect our client to the URL in our URL DB
 router.get('/u/:shortURL', (req, res) => {
-  // TODO: if the shortURL exists redirect to the long url otherwise render a 404
-  let longURL = urlDatabase[req.params.shortURL].url;
-  // console.log(longURL);
-  res.redirect(longURL);
+  // if the shortURL exists redirect to the long url otherwise render a 404
+  const shortURL = req.params.shortURL;
+  if(helper.tinyUrlCheck(shortURL, urlDatabase)){
+    // TODO: urlcount will be an array of objects 2 keys userid and timestamp
+    // TODO: uniqueURLcount url will be a key with an object that will be a letter count of userids with one as the value (obj.keys().length)
+    // TODO: Check if user has url cookie one user can visit many websites (letter count) give them one if they don't have one
+    // TODO: the function will do all of the above in a setter env
+    // TODO: a second function will be used to get the unique count
+    let longURL = urlDatabase[shortURL].url;
+    res.redirect(longURL);
+    return;
+  }
+  res.status(404).render(404);
 });
 
 // Create a new tinyURL by getting this form
@@ -20,8 +30,10 @@ router.get("/urls/new", (req, res) => {
     res.render("urls_new");
     return;
   }
-  // TODO: Make sure view can render the message and a link to login
-  req.session.error = "Sorry, you will need to log in to generate a tinyURL";
+  // Make sure view can render the message and a link to login
+  const error = "Sorry, you will need to log in to generate a tinyURL";
+  req.session.error = error;
+  res.locals.error = error;
   res.status(401).render("401");
 });
 
@@ -87,7 +99,7 @@ router.get("/urls/:shortURL", (req, res) => {
 });
 
 // Update the Long or Original of the specified URL
-// TODO: Changed to PUT
+// Changed to PUT
 router.put("/urls/:shortURL", (req, res) => {
   if(res.locals.userLoggedIn) {
     if(helper.userBelongsToUrl(req, res, urlDatabase)) {

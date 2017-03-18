@@ -84,6 +84,32 @@ function userBelongsToUrl(request, response, database) {
   return false;
 }
 
+// userTracker
+function userTracker(request, response){
+  if(request.cookies.uniqueuser_id){
+    return request.cookies.uniqueuser_id;
+  }else {
+    const id = this.generateRandomString();
+    response.cookie("uniqueuser_id", id);
+    return id;
+  }
+}
+
+// setStats
+function setUrlTracker(shortURL, uniqueID, database) {
+  if(!database.stats[shortURL]) {
+    database.stats[shortURL] = [];
+  }
+  database.stats[shortURL].push({
+    userID: uniqueID,
+    timestamp: Date.now();
+  });
+}
+// checkUniqueUser
+function checkUniqueUser(shortURL, uniqueID, database) {
+  database.unique[shortURL][uniqueID] = 1;
+}
+
 module.exports = {
   bcrypt: bcrypt,
   generateRandomString: generateRandomString,
@@ -92,5 +118,8 @@ module.exports = {
   emailCheck: emailCheck,
   userLoggedIn: userLoggedIn,
   idCheck: idCheck,
-  userBelongsToUrl: userBelongsToUrl
+  userBelongsToUrl: userBelongsToUrl,
+  userTracker: userTracker,
+  setUrlTracker: setUrlTracker,
+  checkUniqueUser: checkUniqueUser
 };

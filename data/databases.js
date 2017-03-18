@@ -29,8 +29,31 @@ const userEmailDatabase = {
   "useremail2@g.com": "userRandomID2"
 };
 
+// Tracking Database
+const trackingDatabase = {
+  "stats": {"shorturl": [
+      {
+        userID: "uniqueID",
+        timestamp: 90886555667
+      }
+    ]
+  },
+  "unique": {
+    "url": {
+      "userID": 1
+    }
+  }
+};
+
+// TODO: make the userLink db so it is more simple
+// const userShort = {
+//   user: [fasdfjk,fadslfkkdjas],
+//   user2: []
+// };
+
 module.exports = {
   urlDatabase: urlDatabase, 
   userDatabase: userDatabase, 
-  userEmailDatabase: userEmailDatabase
+  userEmailDatabase: userEmailDatabase,
+  trackingDatabase: trackingDatabase
 };

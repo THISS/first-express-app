@@ -35,7 +35,9 @@ router.post("/login", (req, res) => {
       }
     }
   }
-  req.session.error = "Email or Password are incorrect";
+  const error = "Email or Password are incorrect";
+  req.session.error = error;
+  res.locals.error = error;
   res.status(401).render("401");
 });
 // Logout
@@ -67,6 +69,7 @@ router.post("/register", (req, res) => {
     if(helper.emailCheck(form.email, userEmailDatabase)) {
       const error = "Sorry, email is already taken";
       req.session.error = error;
+      res.locals.error = error;
       res.status(400).render("400");
       return;
     }
@@ -88,8 +91,9 @@ router.post("/register", (req, res) => {
     return;
   }
   // if either email or password not supplied render to 400 page
-  const error = "You need to have enter an email and a password";
+  const error = "You need to have entered an email and a password";
   req.session.error = error;
+  res.locals.error = error;
   res.status(400).render("400");
 });
 

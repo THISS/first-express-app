@@ -12,10 +12,14 @@ function generateRandomString() {
 }
 
 // tinyURL Check
-
-// see if the shortURL is in the urlDatabase
-// if it is then return true
-// otherwise return false
+function tinyUrlCheck(shortURL, urlDatabase) {
+  // see if the shortURL is in the urlDatabase
+  if(shortURL in urlDatabase) {
+    // if it is then return true
+    return true;
+  }
+  return false;
+}
 
 // Get the users URLs
 function urlsForUserId(userID, urlDatabase) {
@@ -33,15 +37,15 @@ function urlsForUserId(userID, urlDatabase) {
   return userURLS;
 }
 
-// TODO:
+// TODO: to see if I can do it better
 // create result array (empty)
 // check for email
 // if not found return result (empty array)
 // else if found loop the array
-// check iterator against urlDatabase and push to result
+// check key against urlDatabase and push to result
 // return result
 
-// TODO:
+// TODO: see above
 // check for email in the link db
 // if not found create it with an empty array
 // add shortURL to the userid via push
@@ -82,7 +86,8 @@ function userBelongsToUrl(request, response, database) {
 
 module.exports = {
   bcrypt: bcrypt,
-  generateRandomString: generateRandomString, 
+  generateRandomString: generateRandomString,
+  tinyUrlCheck: tinyUrlCheck,
   urlsForUserId: urlsForUserId,
   emailCheck: emailCheck,
   userLoggedIn: userLoggedIn,

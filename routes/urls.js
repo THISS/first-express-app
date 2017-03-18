@@ -53,56 +53,61 @@ router.get("/urls", (req, res) => {
     res.locals.urlDatabase = helper.urlsForUserId(res.locals.user.id, urlDatabase);
     res.render("urls_index");
     return;
-    // TODO: add a link to create a new link in partials to add to different pages
     // TODO: remove the link around the long url
     // TODO: add a date created
     // TODO: add a counter of visits
     // TODO: number of "Unique Visits"
   }
-  res.status(401).render("urls_index");
+  res.status(401).render("401");
 });
 
 // Show a tinyURL and allow user to edit the original
 router.get("/urls/:shortURL", (req, res) => {
   if(res.locals.userLoggedIn) {
     if(helper.userBelongsToUrl(req, res, urlDatabase)) {
-      // TODO: make a function in helpers to check if the shorturl is in the urldb
-      // TODO: if it is not, then return a 404 with a relevant error message
+      // check if the shorturl is in the urldb
+      // if it is not, then return a 404 with a relevant error message
       const short = req.params.shortURL;
-      res.locals.shortURL = short;
-      res.locals.bigURL = urlDatabase[short].url;
-      // TODO: date created
-      // TODO: number of visits
-      // TODO: number of unique visits
-      res.render("urls_show");
+      if(helper.tinyUrlCheck(short, urlDatabase)) {
+        res.locals.shortURL = short;
+        res.locals.bigURL = urlDatabase[short].url;
+        // TODO: date created
+        // TODO: number of visits
+        // TODO: number of unique visits
+        res.render("urls_show");
+        return;
+      }
+      res.status(404).render(404);
       return;
     }
     req.session.error = "You do not have access to this website link page";
-    res.status(403).render("urls_index");
+    res.status(403).render("403");
   }
   req.session.error = "Sorry, you need to be logged in to view a website links page";
-  res.status(401).render("urls_index");
+  res.status(401).render("401");
 });
 
 // Update the Long or Original of the specified URL
 router.post("/urls/:shortURL", (req, res) => {
   if(res.locals.userLoggedIn) {
     if(helper.userBelongsToUrl(req, res, urlDatabase)) {
-      //TODO: Check url exists
+      // Check if the short url exists
       const short = req.params.shortURL;
-      const big = req.body.update_input;
-      urlDatabase[short].url = big;
-      res.redirect(`/urls/${short}`);
+      if(helper.tinyUrlCheck(short, urlDatabase)) {
+        const big = req.body.update_input;
+        urlDatabase[short].url = big;
+        res.redirect(`/urls/${short}`);
+        return;
+      }
+      res.status(404).return("404");
       return;
     }
-    // TODO: Test the redirect and error code, ask mentor if this is correct
     req.session.error = "Sorry, you don't have access to that url";
-    res.status(403).redirect("/urls");
+    res.status(403).render("403");
     return;
   }
-  // TODO: Test the redirect has the correct status code, ask for help
   req.session.error = "You must login to access url pages";
-  res.status(401).redirect("/urls");
+  res.status(401).render("401");
 });
 
 // Delete the specified URL

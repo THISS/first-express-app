@@ -17,6 +17,7 @@ const userDatabase = require("./data/databases").userDatabase;
 app.set('view engine', 'ejs');
 
 // The MiddleWare Begins
+app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieSession({
   name: 'session',

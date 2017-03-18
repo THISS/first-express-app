@@ -1,5 +1,17 @@
-<h1>Sorry...</h1>
-<p>
-  Unable to register with your supplied email and password please make sure you have filled out the form correctly <a href="/register">Register</a>
-</p>
-<% include partials/_header %>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>TinyApp</title>
+  </head>
+  <body>
+    <% include partials/_header %>
+    <% if(error) {%>
+      <h4><%= error %></h4>
+    <% } %>
+    <h1>Sorry...</h1>
+    <p>
+      Unable to register with your supplied email and password please make sure you have filled out the form correctly <a href="/register">Register</a>
+    </p>
+    <img src="/images/400.jpeg" />
+  </body>
+</html>

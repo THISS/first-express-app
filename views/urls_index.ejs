@@ -10,12 +10,10 @@
     <ul>
     <% for(let urlObj of urlDatabase) { %>
       <li>
-          <form action="/urls/<%= urlObj.shortURL %>/delete" method="POST">
-            <label>
-              <a href="/urls/<%= urlObj.shortURL %>"><%= urlObj.longURL %></a>
-              <a href="/urls/<%= urlObj.shortURL %>">Edit</a>
-              <input type="submit" name="delete_input" value="X">
-            </label>
+            <%= urlObj.longURL %>
+          <form action="/urls/<%= urlObj.shortURL %>/delete" method="POST" style="display: inline-block">
+            <button><a href="/urls/<%= urlObj.shortURL %>">Edit</a></button>
+            <input type="submit" name="delete_input" value="X">
           </form>
       </li>
     <% } %>

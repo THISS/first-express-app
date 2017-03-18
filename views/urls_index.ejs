@@ -10,12 +10,12 @@
     <ul>
     <% for(let urlObj of urlDatabase) { %>
       <li>
-            <%= urlObj.longURL %>
+            <%= `${urlObj.shortURL} - ${urlObj.longURL}` %>
           <form action="/urls/<%= urlObj.shortURL %>?_method=DELETE" method="POST" style="display: inline-block">
             <button><a href="/urls/<%= urlObj.shortURL %>">Edit</a></button>
             <input type="submit" name="delete_input" value="X">
           </form>
-          <div>Date Created: <%= Date(urlObj.dateCreated) %> | Number of Visits: <%= urlObj.numVisits %> | Unique Visitors: <%= urlObj.numUniqueVisits %></div>
+          <div>Date Created: <span class="visit-date"><%= urlObj.dateCreated %></span> | Number of Visits: <%= urlObj.stats.length%> | Unique Visitors: <%= urlObj.numUniqueVisits %></div>
       </li>
     <% } %>
     </ul>
@@ -24,5 +24,16 @@
     <% } else {%>
       <h3>Sorry - you must <a href="/register">Sign Up</a> or <a href="/login">Log In</a> to use TinyURL</h3>
     <% } %>
+    <script>
+      (function() {
+        var dateSpans = document.getElementsByClassName("visit-date");
+        console.log(dateSpans);
+        for(let span of dateSpans) {
+          var unix = span.innerHTML;
+          var formatted = new Date(Number(unix));
+          span.innerHTML = formatted;
+        }
+      })(); 
+    </script>
   </body>
 </html>

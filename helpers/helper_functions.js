@@ -31,7 +31,7 @@ function urlsForUserId(userID, urlDatabase, statDatabase) {
           shortURL: key,
           longURL: urlDatabase[key].url,
           dateCreated: urlDatabase[key].datecreated,
-          numVisits: this.getStats(key, statDatabase).length,
+          stats: this.getStats(key, statDatabase),
           numUniqueVisits: this.getUniqueCount(key, statDatabase)
         });
       }
@@ -110,16 +110,25 @@ function setUrlTracker(shortURL, uniqueID, database) {
 }
 // checkUniqueUser
 function checkUniqueUser(shortURL, uniqueID, database) {
+  if(!database.unique[shortURL]){
+    database.unique[shortURL] = 0;
+  }
   database.unique[shortURL][uniqueID] = 1;
 }
 
 // getUnique count
 function getUniqueCount(shortURL, statDatabase) {
-  return statDatabase.unique[shortURL].keys().length;
+  if(statDatabase.unique[shortURL]) {
+    return statDatabase.unique[shortURL].keys().length;
+  }
+  return 0;
 }
 // getstats
 function getStats(shortURL, statDatabase) {
-  return statDatabase.stats[shortURL];
+  if(statDatabase.stats[shortURL] && statDatabase.stats[shortURL].length > 0) {
+    return statDatabase.stats[shortURL];
+  }
+  return [];
 }
 
 module.exports = {

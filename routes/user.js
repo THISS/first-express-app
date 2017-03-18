@@ -30,7 +30,7 @@ router.post("/login", (req, res) => {
       const password = userDatabase[userID].passhash;
       if(helper.bcrypt.compareSync(req.body.password, password)){
         req.session.user_id = userID;
-        res.redirect('/');
+        res.redirect("/");
         return;
       }
     }
@@ -43,18 +43,18 @@ router.post("/login", (req, res) => {
 // Logout
 router.post("/logout", (req, res) => {
   req.session.user_id = null;
-  res.redirect('/');
+  res.redirect("/");
 });
 
 // Registration form
 router.get("/register", (req, res) => {
   if(res.locals.userLoggedIn){
-    res.redirect('/');
+    res.redirect("/");
     return;
   }
   // TODO: Check if the middleware can do this
   // res.locals.error = req.sessions.error;
-  res.render('register_user');
+  res.render("register_user");
 });
 
 router.post("/register", (req, res) => {
@@ -84,10 +84,8 @@ router.post("/register", (req, res) => {
 
     // Add email to id Lookup
     userEmailDatabase[form.email] = userID;
-    // Set user_id as cookie
     req.session.user_id = userID;
-    // redirect to '/' path 
-    res.redirect('/');
+    res.redirect("/");
     return;
   }
   // if either email or password not supplied render to 400 page

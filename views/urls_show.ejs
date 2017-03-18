@@ -15,10 +15,30 @@
     <form action="/urls/<%= shortURL %>?_method=DELETE" method="post" style="display: inline-block" >
       <input type="submit" value="X" />
     </form>
-    <div>Date Created: <%= Date(dateCreated) %> | Unique Visitors: <%= uCount %></div>
-    USER ID \t Visited Date
-    <% for(let i = 0; i < stats.length; ++i) { %>
-      <%= stats[i].userID \t stats[i].timestamp %>
-    <% } %>
+    <div>Date Created: <span id="created-date"><%= dateCreated %></span> | Unique Visitors: <%= uCount %></div>
+    <table>
+      <tr>
+        <th>USER ID</th><th>Visited Date</th>
+      </tr>
+        <% for(let i = 0; i < stats.length; ++i) { %>
+       <tr><td><%= stats[i].userID %></td><td><span class="user-timestamp"><%= stats[i].timestamp %></span></td></tr>
+      <% } %>
+    </table>
+    <script>
+      (function() {
+        var dateSpan = document.getElementById("created-date");
+        var unix = dateSpan.innerHTML;
+        var formatted = new Date(Number(unix));
+        dateSpan.innerHTML = formatted;
+
+        var userTimestamps = document.getElementsByClassName("user-timestamp");
+        for(var time of userTimestamps) {
+          var unix = time.innerHTML;
+          var formatted = new Date(Number(unix));
+          time.innerHTML = formatted;
+        }
+
+      })(); 
+    </script>
   </body>
 </html>

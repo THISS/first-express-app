@@ -7,6 +7,8 @@ const userEmailDatabase = require("../data/databases").userEmailDatabase;// Data
 const urlDatabase = require("../data/databases").urlDatabase;
 const trackingDatabase = require("../data/databases").trackingDatabase;
 
+
+// TODO: make some checking functions for email, and websites
 // redirect our client to the URL in our URL DB
 router.get('/u/:shortURL', (req, res) => {
   // if the shortURL exists redirect to the long url otherwise render a 404
@@ -22,7 +24,7 @@ router.get('/u/:shortURL', (req, res) => {
     res.redirect(longURL);
     return;
   }
-  res.status(404).render(404);
+  res.status(404).render("404");
 });
 
 // Create a new tinyURL by getting this form
@@ -43,7 +45,8 @@ router.post("/urls", (req, res) => {
   if(res.locals.userLoggedIn){
     const bigURL = req.body.longURL;
     const shortURL = helper.generateRandomString();
-    urlDatabase[shortURL] = {url: bigURL, userid: res.locals.user.id, datecreated: Date.now()};
+    const date = Date.now();
+    urlDatabase[shortURL] = {url: bigURL, userid: res.locals.user.id, datecreated: date};
     res.redirect(`/urls/${shortURL}`);
     return;
   }
@@ -84,14 +87,10 @@ router.get("/urls/:shortURL", (req, res) => {
         res.locals.dateCreated = urlDatabase[short].datecreated;
         res.locals.stats = helper.getStats(short, trackingDatabase);
         res.locals.uCount = helper.getUniqueCount(short, trackingDatabase);
-    //  add a date created
-    //  add a counter of visits
-    // add a counter of uniques
-    // set res.locals.stats .counts .unique .usr/time
         res.render("urls_show");
         return;
       }
-      res.status(404).render(404);
+      res.status(404).render("404");
       return;
     }
     req.session.error = "You do not have access to this website link page";

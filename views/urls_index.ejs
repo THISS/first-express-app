@@ -7,18 +7,32 @@
     <% include partials/_header.ejs %>
     <% if(typeof urlDatabase !== "undefined" && urlDatabase.length > 0) { %>
     <h2><a href="/urls/new">Create a New Short Link</a></h2>
-    <ul>
+      <table>
+        <tr>
+          <th>tinyURL</th>
+          <th>URL Link</th>
+          <th>Edit</th>
+          <th>Delete</th>
+          <th>Date Created</th>
+          <th>No. of Visits</th>
+          <th>Unique Visitors</th>
+        </tr>
     <% for(let urlObj of urlDatabase) { %>
-      <li>
-            <%= `${urlObj.shortURL} - ${urlObj.longURL}` %>
-          <form action="/urls/<%= urlObj.shortURL %>?_method=DELETE" method="POST" style="display: inline-block">
-            <button><a href="/urls/<%= urlObj.shortURL %>">Edit</a></button>
-            <input type="submit" name="delete_input" value="X">
-          </form>
-          <div>Date Created: <span class="visit-date"><%= urlObj.dateCreated %></span> | Number of Visits: <%= urlObj.stats.length%> | Unique Visitors: <%= urlObj.numUniqueVisits %></div>
-      </li>
+        <tr>
+          <td><%= urlObj.shortURL %></td>
+          <td><%= urlObj.longURL %></td>
+          <td><a href="/urls/<%=urlObj.shortURL %>"><button>Edit</button></a></td>
+          <td>
+            <form action="/urls/<%= urlObj.shortURL %>/delete?_method=DELETE" method="POST">
+              <input type="submit" name="delete_input" value="X">
+            </form>
+          </td>
+          <td><span class="visit-date"><%= urlObj.dateCreated %></span></td>
+          <td style="text-align: right"><%= urlObj.stats.length%></td>
+          <td style="text-align: right"><%= urlObj.numUniqueVisits %></td>
+        </tr>
     <% } %>
-    </ul>
+    </table>
     <% }else if(userLoggedIn) {%>
       <h3>Hey, you should get some URLs linked to by <a href="/urls/new">Creating a New Short Link</a></h3>
     <% } else {%>

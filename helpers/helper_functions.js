@@ -81,8 +81,10 @@ function userLoggedIn(response) {
 
 // needs a pre populated req, res obj
 function userBelongsToUrl(request, response, database) {
-  if(response.locals.user.id === database[request.params.shortURL].userid) {
-    return true;
+  if(database[request.params.shortURL]){
+    if(response.locals.user.id === database[request.params.shortURL].userid) {
+      return true;
+    }
   }
   return false;
 }

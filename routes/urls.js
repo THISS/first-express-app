@@ -35,7 +35,7 @@ router.get("/urls/new", (req, res) => {
     return;
   }
   // Make sure view can render the message and a link to login
-  const error = "Sorry, you will need to log in to generate a tinyURL";
+  const error = "log in before trying... gosh, it's like trying to teach the alphabet to a turd";
   req.session.error = error;
   res.locals.error = error;
   res.status(401).render("401");
@@ -51,7 +51,9 @@ router.post("/urls", (req, res) => {
     res.redirect(`/urls/${shortURL}`);
     return;
   }
-  req.session.error = "You need to log in to post website links";
+  const error = "Why would you feel like you could do that, log in and post to YOUR urls, not ours";
+  res.locals.error = error
+  req.session.error = error;
   res.status(401).render("401");
 });
 
@@ -72,6 +74,9 @@ router.get("/urls", (req, res) => {
     res.render("urls_index");
     return;
   }
+  const error = "You need to log in to see YOUR urls";
+  res.locals.error = error
+  req.session.error = error;
   res.status(401).render("401");
 });
 
@@ -91,13 +96,21 @@ router.get("/urls/:shortURL", (req, res) => {
         res.render("urls_show");
         return;
       }
+      const error = "The page you requested could not be found, check yoself";
+      res.locals.error = error
+      req.session.error = error;
       res.status(404).render("404");
       return;
     }
-    req.session.error = "You do not have access to this website link page";
+    const error = "You do not have access to this website link page, seriously, we don't want you trying these things";
+    req.session.error = error;
+    res.locals.error = error;
     res.status(403).render("403");
+    return;
   }
-  req.session.error = "Sorry, you need to be logged in to view a website links page";
+  const error = "You need to be logged in to view a website links page - are you a brick wall, cos I feel like I am talking to one";
+  req.session.error = error;
+  res.locals.error = error;
   res.status(401).render("401");
 });
 
@@ -114,19 +127,26 @@ router.put("/urls/:shortURL", (req, res) => {
         res.redirect(`/urls/${short}`);
         return;
       }
+      const error = "it does not exist. Your bad, not ours";
+      req.session.error = error;
+      res.locals.error = error;
       res.status(404).return("404");
       return;
     }
-    req.session.error = "Sorry, you don't have access to that url";
+    const error = "seriously, why are you even trying - you get the participation medal but I feel I have wasted this much of my time on you so i am gonna go...";
+    req.session.error = error;
+    res.locals.error = error;
     res.status(403).render("403");
     return;
   }
-  req.session.error = "You must login to access url pages";
+  const error = "You must login to access url pages otherwise enjoy the login and registration pages, try googling how to enter bit.chi";
+  req.session.error = error;
+  res.locals.error = error;
   res.status(401).render("401");
 });
 
 // Delete the specified URL
-router.delete("/urls/:shortURL", (req, res) => {
+router.delete("/urls/:shortURL/delete", (req, res) => {
   if(res.locals.userLoggedIn && helper.userBelongsToUrl(req, res, urlDatabase)) {
     const short = req.params.shortURL;
     delete urlDatabase[short];

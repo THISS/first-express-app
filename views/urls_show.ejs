@@ -12,7 +12,7 @@
         <input type="submit" value="Update URL">
       </label>
     </form>
-    <form action="/urls/<%= shortURL %>?_method=DELETE" method="post" style="display: inline-block" >
+    <form action="/urls/<%= shortURL %>/delete?_method=DELETE" method="post" style="display: inline-block" >
       <input type="submit" value="X" />
     </form>
     <div>Date Created: <span id="created-date"><%= dateCreated %></span> | Unique Visitors: <%= uCount %></div>

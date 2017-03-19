@@ -36,7 +36,7 @@
     <% }else if(userLoggedIn) {%>
       <h3>Hey, you should get some URLs linked to by <a href="/urls/new">Creating a New Short Link</a></h3>
     <% } else {%>
-      <h3>Sorry - you must <a href="/register">Sign Up</a> or <a href="/login">Log In</a> to use TinyURL</h3>
+      <h3>- you must <a href="/register">Sign Up</a> or <a href="/login">Log In</a> to use BIT.chi</h3>
     <% } %>
     <script>
       (function() {
@@ -44,7 +44,8 @@
         console.log(dateSpans);
         for(let span of dateSpans) {
           var unix = span.innerHTML;
-          var formatted = new Date(Number(unix));
+          var theDate = new Date(Number(unix));
+          var formatted = `${theDate.getFullYear()}-${theDate.getMonth()}-${theDate.getDay()} ${theDate.getHours()}:${theDate.getMinutes()}`
           span.innerHTML = formatted;
         }
       })(); 

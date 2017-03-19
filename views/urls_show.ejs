@@ -28,13 +28,15 @@
       (function() {
         var dateSpan = document.getElementById("created-date");
         var unix = dateSpan.innerHTML;
-        var formatted = new Date(Number(unix));
+        var theDate = new Date(Number(unix));
+        var formatted = `${theDate.getFullYear()}-${theDate.getMonth()}-${theDate.getDay()} ${theDate.getHours()}:${theDate.getMinutes()}`
         dateSpan.innerHTML = formatted;
 
         var userTimestamps = document.getElementsByClassName("user-timestamp");
         for(var time of userTimestamps) {
           var unix = time.innerHTML;
-          var formatted = new Date(Number(unix));
+          var theDate = new Date(Number(unix));
+          var formatted = `${theDate.getFullYear()}-${theDate.getMonth()}-${theDate.getDay()} ${theDate.getHours()}:${theDate.getMinutes()}`
           time.innerHTML = formatted;
         }
 

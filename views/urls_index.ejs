@@ -45,7 +45,7 @@
         for(let span of dateSpans) {
           var unix = span.innerHTML;
           var theDate = new Date(Number(unix));
-          var formatted = `${theDate.getFullYear()}-${theDate.getMonth()}-${theDate.getDay()} ${theDate.getHours()}:${theDate.getMinutes()}`
+          var formatted = `${theDate.getFullYear()}-${theDate.getMonth() + 1}-${theDate.getDate()} ${theDate.getHours()}:${theDate.getMinutes()}`
           span.innerHTML = formatted;
         }
       })(); 
